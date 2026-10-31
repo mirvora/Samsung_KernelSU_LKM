@@ -15,7 +15,7 @@ on:
           - Actions
           - Pre-Release
           - Release
-        default: Actions
+        default: Release
 
       lto:
         description: "Choose LTO build"
@@ -30,20 +30,20 @@ on:
       ksun:
         description: "KSUN"
         required: false
-        default: true
+        default: false
         type: boolean
 
       susfs:
         description: "SUSFS"
         required: false
         type: boolean
-        default: true
+        default: false
 
       nomount:
         description: "NoMount"
         required: false
         type: boolean
-        default: true
+        default: false
 
       bbg:
         description: "BBG"
