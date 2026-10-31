@@ -99,7 +99,7 @@ jobs:
 
     env:
       GH_TOKEN: ${{ github.token }}
-      RELEASE_NAME: "Samsung GKI Kernels With KSUN v3.4.2 & SUSFS v2.3.0"
+      RELEASE_NAME: "Samsung GKI Kernels"
       RELEASE_BODY: ""
     steps:
       - name: Free Disk Space
@@ -140,16 +140,6 @@ jobs:
           path: ./downloaded-artifacts
           pattern: '*-AnyKernel3'
 
-      - name: get commit hashes
-        run: |
-         echo "SUSFS_510=$(git ls-remote https://gitlab.com/simonpunk/susfs4ksu.git refs/heads/gki-android12-5.10 | cut -f1)" >> $GITHUB_ENV
-         echo "SUSFS_515=$(git ls-remote https://gitlab.com/simonpunk/susfs4ksu.git refs/heads/gki-android13-5.15 | cut -f1)" >> $GITHUB_ENV
-         echo "SUSFS_61=$(git ls-remote https://gitlab.com/simonpunk/susfs4ksu.git refs/heads/gki-android14-6.1 | cut -f1)" >> $GITHUB_ENV
-         echo "SUSFS_66=$(git ls-remote https://gitlab.com/simonpunk/susfs4ksu.git refs/heads/gki-android15-6.6 | cut -f1)" >> $GITHUB_ENV
-         echo "KSUN_HASH=$(git ls-remote https://github.com/pershoot/KernelSU-Next.git refs/heads/dev | cut -f1)" >> $GITHUB_ENV
-         echo "BBG_HASH=$(git ls-remote https://github.com/vc-teahouse/Baseband-guard.git refs/heads/main | cut -f1)" >> $GITHUB_ENV
-         echo "NM_HASH=$(git ls-remote https://github.com/maxsteeel/nomount.git refs/heads/master | cut -f1)" >> $GITHUB_ENV
-
       - name: Set release body
         run: |
           cat << 'EOF' > release_body.md
@@ -162,41 +152,9 @@ jobs:
           Features:
           EOF
 
-          if [ "${{ inputs.ksun }}" = "true" ]; then
-          cat <<'EOF' >> release_body.md
-          -> KernelSU-Next v3.4.2 - https://github.com/KernelSU-Next/KernelSU-Next
-          NOTE: For kernel integration I am using pershoots fork of KernelSU-next. He has claimed that even though everything works fine, the dev has warned that this is not production ready!
-          EOF
-          fi
-
-          if [ "${{ inputs.susfs }}" = "true" ]; then
-          cat <<'EOF' >> release_body.md
-          -> SUSFS ඞ v2.3.0 - https://gitlab.com/simonpunk/susfs4ksu
-          -> SUSFS Inline hooks
-          EOF
-          fi
-
-          if [ "${{ inputs.bbg }}" = "true" ]; then
-          cat <<'EOF' >> release_body.md
-          -> BBG - https://github.com/vc-teahouse/Baseband-guard
-          EOF
-          fi
-
           if [ "${{ inputs.unicodefix }}" = "true" ]; then
           cat <<'EOF' >> release_body.md
           -> unicode fix - Prevent path traversal and other detections using non-printable Unicode codepoints
-          EOF
-          fi
-
-          if [ "${{ inputs.zeromount }}" = "true" ]; then
-          cat <<'EOF' >> release_body.md
-          -> Zeromount - https://github.com/Enginex0/zeromount
-          EOF
-          fi
-
-          if [ "${{ inputs.nomount }}" = "true" ]; then
-          cat <<'EOF' >> release_body.md
-          -> NoMount - https://github.com/maxsteeel/nomount
           EOF
           fi
 
@@ -244,44 +202,6 @@ jobs:
           
           Notes:
           - Currently kpm ONLY works for S24U and S25U.
-          
-          Module: 
-          -> https://github.com/sidex15/ksu_module_susfs
-          -> https://github.com/rrr333nnn333/BRENE
-
-          Commit Hashes:
-          EOF
-          if ${{ inputs.ksun }} == 'true' ]]; then
-          cat <<'EOF' >> release_body.md
-          
-          KSUN: ${{ env.KSUN_HASH }}
-          
-          EOF
-          fi
-          if ${{ inputs.susfs }} == 'true' ]]; then
-          cat <<'EOF' >> release_body.md
-          SUSFS: 
-          android12-5.10: ${{ env.SUSFS_510 }}
-          android13-5.15: ${{ env.SUSFS_515 }}
-          android14-6.1: ${{ env.SUSFS_61 }}
-          android15-6.6: ${{ env.SUSFS_66 }}
-          
-          EOF
-          fi
-          
-          if ${{ inputs.bbg }} == 'true' ]]; then
-          cat <<'EOF' >> release_body.md
-          BBG: ${{ env.BBG_HASH }}
-          
-          EOF
-          fi
-          
-          if ${{ inputs.nomount }} == 'true' ]]; then
-          cat <<'EOF' >> release_body.md
-          NoMount: ${{ env.NM_HASH }}
-          
-          EOF
-          fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
