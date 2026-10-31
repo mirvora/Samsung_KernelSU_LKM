@@ -81,11 +81,7 @@ jobs:
     uses: ./.github/workflows/kernel-samsung.yml
     secrets: inherit
     with:
-      susfs: ${{ inputs.susfs }}
-      bbg: ${{ inputs.bbg }}
       unicodefix: ${{ inputs.unicodefix }}
-      nomount: ${{ inputs.nomount }}
-      ksun: ${{ inputs.ksun }}
       droidspace: ${{ inputs.droidspace }}
       ntsync: ${{ inputs.ntsync }}
       bbrv3: ${{ inputs.bbrv3 }}
