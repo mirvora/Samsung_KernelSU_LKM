@@ -12,20 +12,11 @@ on:
       build_type:
         required: false
         type: string
-      susfs:
-        required: false
-        type: string
       bbg:
         required: false
         type: string
       unicodefix:
         required: true
-        type: string
-      nomount:
-        required: false
-        type: string
-      ksun:
-        required: false
         type: string
       droidspace:
         required: true
