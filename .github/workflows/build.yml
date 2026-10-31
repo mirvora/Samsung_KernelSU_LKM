@@ -12,9 +12,6 @@ on:
       build_type:
         required: false
         type: string
-      bbg:
-        required: false
-        type: string
       unicodefix:
         required: true
         type: string
