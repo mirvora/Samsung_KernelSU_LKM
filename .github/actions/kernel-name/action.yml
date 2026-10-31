@@ -9,7 +9,7 @@ runs:
     run: |
      cd "$COMMON"
 
-     sed -i '$s|echo "\$res"|echo "\$res-Wild"|' ./scripts/setlocalversion
+     sed -i '$s|echo "\$res"|echo "\$res-mirvora"|' ./scripts/setlocalversion
 
   - name: remove dirty flag
     shell: bash
