@@ -223,7 +223,7 @@ jobs:
 #        uses: ./.github/actions/6.6-fix
 
       - name: Set Kernel Configuration Variables
-        if: inputs.ksun == 'true'
+        if: inputs.branch == 'true'
         uses: ./.github/actions/configs
          
       - name: Change Kernel Name and clean dirty
@@ -235,10 +235,6 @@ jobs:
       - name: Set file name
         uses: ./.github/actions/file-name
         with:
-         ksun: ${{ inputs.ksun }}
-         susfs: ${{ inputs.susfs }}
-         nomount: ${{ inputs.nomount }}
-         bbg: ${{ inputs.bbg }}
          bbrv3: ${{ inputs.bbrv3 }}
          droidspaces: ${{ inputs.droidspace }}
          ntsync: ${{ inputs.ntsync }}
@@ -330,41 +326,6 @@ jobs:
           echo "## Build Information" >> build_summary.md
           echo "- **Android Version**: ${{ inputs.android_version }}" >> build_summary.md
           echo "- **Kernel Version**: ${{ inputs.kernel_version }}.${{ inputs.sub_level }}" >> build_summary.md
-          echo "- **BBG**: Installed" >> build_summary.md
-          echo "" >> build_summary.md
-
-          # Get KernelSU-Next commit
-          if [ -d "$CONFIG/KernelSU-Next" ]; then
-            cd "$CONFIG/KernelSU-Next"
-            KSUN_COMMIT=$(git rev-parse HEAD)
-            KSUN_URL="https://github.com/WildKernels/KernelSU-Next/commit/$KSUN_COMMIT"
-            echo "- **KernelSU-Next**: [$KSUN_COMMIT]($KSUN_URL)" >> "$GITHUB_WORKSPACE/build_summary.md"
-            cd "$GITHUB_WORKSPACE"
-          else
-            echo "- **KernelSU-Next**: not present" >> build_summary.md
-          fi
-          
-          # Get Baseband-guard commit
-          if [ -d "$CONFIG/Baseband-guard" ]; then
-            cd "$CONFIG/Baseband-guard"
-            BBG_COMMIT=$(git rev-parse HEAD)
-            BBG_URL="https://github.com/vc-teahouse/Baseband-guard/commit/$BBG_COMMIT"
-            echo "- **Baseband-guard**: [$BBG_COMMIT]($BBG_URL)" >> "$GITHUB_WORKSPACE/build_summary.md"
-            cd "$GITHUB_WORKSPACE"
-          else
-            echo "- **Baseband-guard**: not present" >> build_summary.md
-          fi
-          
-          # Get SUSFS4KSU commit
-          if [ -d "$GITHUB_WORKSPACE/susfs4ksu" ]; then
-            cd "$GITHUB_WORKSPACE/susfs4ksu"
-            SUSFS_COMMIT=$(git rev-parse HEAD)
-            SUSFS_URL="https://gitlab.com/simonpunk/susfs4ksu/-/commit/$SUSFS_COMMIT"
-            echo "- **SUSFS4KSU (v2.1.0)**: [$SUSFS_COMMIT]($SUSFS_URL)" >> "$GITHUB_WORKSPACE/build_summary.md"
-            cd "$GITHUB_WORKSPACE"
-          else
-            echo "- **SUSFS4KSU (v2.1.0)**: not present" >> build_summary.md
-          fi
           echo "" >> build_summary.md
           
           # Add artifact summary with presence verification
