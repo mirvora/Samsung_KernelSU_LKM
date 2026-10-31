@@ -13,19 +13,19 @@ on:
         required: false
         type: string
       susfs:
-        required: true
+        required: false
         type: string
       bbg:
-        required: true
+        required: false
         type: string
       unicodefix:
         required: true
         type: string
       nomount:
-        required: true
+        required: false
         type: string
       ksun:
-        required: true
+        required: false
         type: string
       droidspace:
         required: true
@@ -201,24 +201,6 @@ jobs:
             tar -xf "$file"
             rm "$file"
           done
-
-      - name: Add KernelSU-Next
-        if: inputs.ksun == 'true'
-        uses: ./.github/actions/ksun
-        with:
-          susfs: ${{ inputs.susfs }}
-        
-      - name: Add SUSFS
-        if: inputs.susfs == 'true'
-        uses: ./.github/actions/susfs-patches
-
-      - name: add nomount
-        if: inputs.nomount == 'true'
-        uses: ./.github/actions/nomount
-
-      - name: Add BBG
-        if: inputs.bbg == 'true'
-        uses: ./.github/actions/bbg
 
       - name: Add unicodefix
         if: inputs.unicodefix == 'true'
