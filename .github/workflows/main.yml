@@ -27,30 +27,6 @@ on:
           - full
         default: default
 
-      ksun:
-        description: "KSUN"
-        required: false
-        default: false
-        type: boolean
-
-      susfs:
-        description: "SUSFS"
-        required: false
-        type: boolean
-        default: false
-
-      nomount:
-        description: "NoMount"
-        required: false
-        type: boolean
-        default: false
-
-      bbg:
-        description: "BBG"
-        required: false
-        type: boolean
-        default: true
-
       unicodefix:
         description: "Unicode fix"
         required: false
