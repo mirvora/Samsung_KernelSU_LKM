@@ -7,12 +7,6 @@ permissions:
 on:
   workflow_call:
     inputs:
-      susfs:
-        required: true
-        type: string
-      bbg:
-        required: true
-        type: string
       unicodefix:
         required: true
         type: string
@@ -57,11 +51,7 @@ jobs:
     with:
       branch: ${{ matrix.branch }}
       build_type: ${{ matrix.build_type }}
-      susfs: ${{ inputs.susfs }}
-      bbg: ${{ inputs.bbg }}
       unicodefix: ${{ inputs.unicodefix }}
-      nomount: ${{ inputs.nomount }}
-      ksun: ${{ inputs.ksun }}
       droidspace: ${{ inputs.droidspace }}
       ntsync: ${{ inputs.ntsync }}
       bbrv3: ${{ inputs.bbrv3 }}
