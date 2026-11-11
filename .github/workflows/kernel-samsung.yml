@@ -42,7 +42,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - branch: "SM-S928B-Oneui8.5"
+          - branch: "SM-S928B-Oneui9"
             build_type: "Bazel"
           
 
