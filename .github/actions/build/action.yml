@@ -43,6 +43,20 @@ runs:
       sed -i '/drivers\/net\/usb\/smsc75xx\.ko/d;/drivers\/net\/usb\/smsc95xx\.ko/d' kernel_platform/common/modules.bzl
       chmod +x build_kernel_GKI.sh
       env $SCRIPT_LTO ./build_kernel_GKI.sh || true
+     elif [[ $BRANCH == SM-S928B* ]]; then
+      mkdir -p out/target/product/e3q
+      sed -i 's/^BUILD_TARGET=$1/BUILD_TARGET=${1:-e3q_eur_openx}/' build_kernel_GKI.sh || true
+      sed -i 's/^export TARGET_BUILD_VARIANT=$2/export TARGET_BUILD_VARIANT=${2:-user}/' build_kernel_GKI.sh || true
+      sed -i 's/^CHIPSET_NAME=$3/CHIPSET_NAME=${3:-pineapple}/' build_kernel_GKI.sh || true
+      chmod +x build_kernel_GKI.sh
+      env $SCRIPT_LTO KERNEL_ONLY=1 ./build_kernel_GKI.sh e3q_eur_openx user pineapple || true
+
+      if ! find . -name "Image" -not -path "*/.*" | grep -q "Image"; then
+       echo "Kernel Image not found after build_kernel_GKI.sh, falling back to direct Bazel build..."
+       cd kernel_platform
+       tools/bazel build $BAZEL_LTO --//msm-kernel:skip_abl=true --//msm-kernel:skip_abi=true --user_kmi_symbol_lists=//msm-kernel:android/abi_gki_aarch64_qcom --ignore_missing_projects //msm-kernel:pineapple_gki || true
+       cd ..
+      fi
      elif [[ $KERNEL_VER == 6.* ]]; then
       chmod +x build_kernel_GKI.sh
       env $SCRIPT_LTO ./build_kernel_GKI.sh || true
@@ -66,7 +80,14 @@ runs:
      fi
      
      cd "$CONFIG"
-     if [[ -f build_kernel_GKI.sh ]]; then
+     if [[ $BRANCH == SM-S928B* ]]; then
+      mkdir -p out/target/product/e3q
+      sed -i 's/^BUILD_TARGET=$1/BUILD_TARGET=${1:-e3q_eur_openx}/' build_kernel_GKI.sh || true
+      sed -i 's/^export TARGET_BUILD_VARIANT=$2/export TARGET_BUILD_VARIANT=${2:-user}/' build_kernel_GKI.sh || true
+      sed -i 's/^CHIPSET_NAME=$3/CHIPSET_NAME=${3:-pineapple}/' build_kernel_GKI.sh || true
+      chmod +x build_kernel_GKI.sh
+      env $SCRIPT_LTO KERNEL_ONLY=1 ./build_kernel_GKI.sh e3q_eur_openx user pineapple || true
+     elif [[ -f build_kernel_GKI.sh ]]; then
       chmod +x build_kernel_GKI.sh
       env $SCRIPT_LTO ./build_kernel_GKI.sh || true
      elif [[ -f build_kernel.sh ]]; then

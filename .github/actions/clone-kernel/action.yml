@@ -10,6 +10,27 @@ runs:
      run: |
       git clone --depth 1 -b $BRANCH --single-branch https://github.com/mirvora/Samsung_Kernels.git $CONFIG
 
+      # Restore kernel_platform/prebuilts and missing patches if prebuilts is missing (stock Samsung source drops omit prebuilts)
+      if [ -d "$CONFIG/kernel_platform" ] && [ ! -d "$CONFIG/kernel_platform/prebuilts" ]; then
+        echo "::warning::kernel_platform/prebuilts is missing in branch $BRANCH! Fetching fallback prebuilts from SM-S928B-Oneui8.5..."
+        git clone --depth 1 -b SM-S928B-Oneui8.5 --single-branch https://github.com/mirvora/Samsung_Kernels.git /tmp/kernel_fallback || \
+        git clone --depth 1 -b SM-S928B-Oneui8.5 --single-branch https://github.com/WildKernels/Samsung_Kernels.git /tmp/kernel_fallback
+        if [ -d "/tmp/kernel_fallback/kernel_platform/prebuilts" ]; then
+          echo "Copying prebuilts into $CONFIG/kernel_platform/prebuilts..."
+          cp -r /tmp/kernel_fallback/kernel_platform/prebuilts "$CONFIG/kernel_platform/"
+
+          if [ -f "/tmp/kernel_fallback/kernel_platform/msm-kernel/build_with_bazel.py" ] && ! grep -q "kernel_only" "$CONFIG/kernel_platform/msm-kernel/build_with_bazel.py" 2>/dev/null; then
+            echo "Copying patched build_with_bazel.py..."
+            cp /tmp/kernel_fallback/kernel_platform/msm-kernel/build_with_bazel.py "$CONFIG/kernel_platform/msm-kernel/"
+          fi
+          if [ -f "/tmp/kernel_fallback/kernel_platform/build/kernel/android/prepare_vendor.sh" ] && ! grep -q "KERNEL_ONLY" "$CONFIG/kernel_platform/build/kernel/android/prepare_vendor.sh" 2>/dev/null; then
+            echo "Copying patched prepare_vendor.sh..."
+            cp /tmp/kernel_fallback/kernel_platform/build/kernel/android/prepare_vendor.sh "$CONFIG/kernel_platform/build/kernel/android/"
+          fi
+        fi
+        rm -rf /tmp/kernel_fallback
+      fi
+
    - name: Clone Kernel Source
      if: ${{ contains(env.BRANCH, 'LOS') }}
      shell: bash
