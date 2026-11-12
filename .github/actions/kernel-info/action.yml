@@ -8,7 +8,7 @@ runs:
       if: ${{ !contains(env.BRANCH, 'LOS') }}
       shell: bash
       run: |
-        REPO="WildKernels/Samsung_Kernels"
+        REPO="mirvora/Samsung_Kernels"
 
         echo "Searching for kernel Makefile on branch $BRANCH"
 
