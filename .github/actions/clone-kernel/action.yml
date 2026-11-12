@@ -8,7 +8,7 @@ runs:
      if: ${{ !contains(env.BRANCH, 'LOS') }}
      shell: bash
      run: |
-      git clone --depth 1 -b $BRANCH --single-branch https://github.com/WildKernels/Samsung_Kernels.git $CONFIG
+      git clone --depth 1 -b $BRANCH --single-branch https://github.com/mirvora/Samsung_Kernels.git $CONFIG
 
    - name: Clone Kernel Source
      if: ${{ contains(env.BRANCH, 'LOS') }}
